@@ -284,28 +284,4 @@ namespace Nimi.UI
             }
         }
     }
-
-
-    public static class SolutionPathHelper
-    {
-        public static string GetSolutionDirectory()
-        {
-            // Начинаем с директории приложения
-            var directory = new DirectoryInfo(AppContext.BaseDirectory);
-
-            // Поднимаемся вверх по иерархии папок, пока не найдем файл .sln
-            while (directory != null && !DirectoryContainsSolution(directory))
-            {
-                directory = directory.Parent;
-            }
-
-            return directory?.FullName
-                ?? throw new InvalidOperationException("Solution directory not found!");
-        }
-
-        private static bool DirectoryContainsSolution(DirectoryInfo directory)
-        {
-            return directory.GetFiles("*.sln").Length > 0;
-        }
-    }
 }
