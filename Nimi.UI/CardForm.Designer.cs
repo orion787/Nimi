@@ -1,4 +1,4 @@
-﻿using Nimi.Core.Attributes;
+using Nimi.Core.Attributes;
 using Nimi.Core.UIconfig;
 using Nimi.Data.Repositories;
 
@@ -17,6 +17,8 @@ namespace Nimi.UI
 
         public CardForm()
         {
+           _uow = UowProvider.GetInstance();
+
             // === Настройка формы ===
             Text = "Учёт партнёров";
             ClientSize = new Size(900, 600);
@@ -25,8 +27,6 @@ namespace Nimi.UI
             FormBorderStyle = FormBorderStyle.Sizable;
 
             // === 1) UoW и UIConfig ===
-            string DbPath = Path.Combine(_solutionPath, "Resources", "partners.db");
-            _uow = new UnitOfWork(DbPath);
             _ui = new UIConfig(typeof(Nimi.Data.Models.Partner))
             {
                 EnableEdit = true,
@@ -38,7 +38,7 @@ namespace Nimi.UI
             _ui.EnableHistory = false;
             _ui.AddRow(1, "Type", "Name", "Discount");
             _ui.AddRow(2, "Phone");
-            _ui.AddRow(3, "Director");
+            _ui.AddRow(3, "Director", "Email");
             _ui.AddRow(4, "Rating");
 
             // === 3) Подписи/виджеты/суффиксы ===
