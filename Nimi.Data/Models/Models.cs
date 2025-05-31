@@ -1,6 +1,8 @@
-﻿using Nimi.Core.Attributes;
-using Nimi.Core.Entities;
 using Nimi.Core.Attributes;
+using Nimi.Core.Entities;
+using Nimi.Data.Repositories;
+using Microsoft.EntityFrameworkCore;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Nimi.Data.Models
 {
@@ -18,17 +20,30 @@ namespace Nimi.Data.Models
         [EntityRelation(typeof(Sale))]
         public ICollection<Sale> Sales { get; set; } = new List<Sale>();
 
+        [NotMapped]
         [Hidden]
         public decimal TotalSales
             => Sales.Sum(s => s.TotalPrice);
 
+        [NotMapped]
         public int Discount
         {
             get
             {
-                if (TotalSales < 10_000) return 0;
-                if (TotalSales < 50_000) return 5;
-                if (TotalSales < 300_000) return 10;
+                UnitOfWork _uow;
+                _uow = UowProvider.GetInstance();
+
+                var sales =_uow.Sales
+                    .Query()
+                    .Where(s => s.PartnerId == Id)
+                    .Include(s => s.Product)
+                    .AsEnumerable();
+
+                decimal total = sales.Sum(s => (s.Product?.Price ?? 0m) * s.Quantity);
+
+                if (total < 10_000) return 0;
+                if (total < 50_000) return 5;
+                if (total < 300_000) return 10;
                 return 15;
             }
         }
@@ -59,6 +74,7 @@ namespace Nimi.Data.Models
         public Product? Product { get; set; }
 
         [Hidden]
+        [NotMapped]
         public decimal TotalPrice
             => (Product?.Price ?? 0m) * Quantity;
     }
