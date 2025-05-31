@@ -25,7 +25,7 @@ namespace Nimi.Data.Repositories.Helpers
 
     public static class Helper
     {
-        private static readonly string _solutionPath = SolutionPathHelper.GetSolutionDirectory();
+        public static readonly string _solutionPath = SolutionPathHelper.GetSolutionDirectory();
         public static string DbPath = Path.Combine(_solutionPath, "Resources", "partners.db");
     }
 }
