@@ -1,4 +1,4 @@
-﻿using Nimi.Core.Entities;
+using Nimi.Core.Entities;
 
 namespace Nimi.Data.Repositories
 {
@@ -9,5 +9,6 @@ namespace Nimi.Data.Repositories
         void Add(T entity);
         void Update(T entity);
         void Remove(T entity);
+        public IQueryable<T> Query();
     }
 }
