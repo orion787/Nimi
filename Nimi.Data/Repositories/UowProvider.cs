@@ -1,31 +1,25 @@
-namespace Nimi.Data.Repositories.Helpers
+using Nimi.Data.Repositories.Helpers;
+
+namespace Nimi.Data.Repositories
 {
-    internal static class SolutionPathHelper
+    public static class UowProvider
     {
-        public static string GetSolutionDirectory()
-        {
-            // Начинаем с директории приложения
-            var directory = new DirectoryInfo(AppContext.BaseDirectory);
+        public static UnitOfWork? Instance { get; private set; } = null;
 
-            // Поднимаемся вверх по иерархии папок, пока не найдем файл .sln
-            while (directory != null && !DirectoryContainsSolution(directory))
+        private static void Initialize()
+        {
+            if (Instance == null)
             {
-                directory = directory.Parent;
+                Instance = new UnitOfWork(Helper.DbPath);
             }
-
-            return directory?.FullName
-                ?? throw new InvalidOperationException("Solution directory not found!");
         }
 
-        private static bool DirectoryContainsSolution(DirectoryInfo directory)
+        public static UnitOfWork GetInstance()
         {
-            return directory.GetFiles("*.sln").Length > 0;
+            if (Instance == null)
+                Initialize();
+            return Instance;
         }
     }
 
-    public static class Helper
-    {
-        public static readonly string _solutionPath = SolutionPathHelper.GetSolutionDirectory();
-        public static string DbPath = Path.Combine(_solutionPath, "Resources", "partners.db");
-    }
 }
