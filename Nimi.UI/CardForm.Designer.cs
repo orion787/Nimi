@@ -1,6 +1,7 @@
 using Nimi.Core.Attributes;
 using Nimi.Core.UIconfig;
 using Nimi.Data.Repositories;
+using Nimi.Data.Repositories.Helpers;
 
 namespace Nimi.UI
 {
@@ -13,7 +14,7 @@ namespace Nimi.UI
         private readonly Button _btnAdd;
         private readonly Panel _mainContainer;
         private readonly Panel _cardsContainer;
-        private readonly string _solutionPath = SolutionPathHelper.GetSolutionDirectory();
+        private readonly string _solutionPath = Helper._solutionPath;
 
         public CardForm()
         {
