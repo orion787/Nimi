@@ -10,5 +10,6 @@ namespace Nimi.Data.Repositories
         void Update(T entity);
         void Remove(T entity);
         public IQueryable<T> Query();
+        public void SaveChanges();
     }
 }
