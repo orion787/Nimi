@@ -33,4 +33,7 @@ public class Repository<T> : INimiRepository<T> where T : EntityBase
 
     public void Remove(T entity)
         => _dbSet.Remove(entity);
+
+    public void SaveChanges()
+        => _ctx.SaveChanges();
 }
